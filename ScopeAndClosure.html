@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scope And Closure</title>
+</head>
+<body>
+    <script>
+        // global scope 
+        var a=10;
+
+        function showVal (val){
+            // function scope 
+            let b=15;
+            console.log("Inside function b="+b);
+            console.log("Inside function val="+val);
+            console.log("Inside function a="+a); //here, we can also access global scope var. in inner function that is closure
+            a=20; //change value of a
+        }
+        
+        // we can anywhere use global variable as parameter 
+        showVal(a);
+        // in above function value of a has been changed it'll directly impact on global var.
+        console.log(a);
+        // we can't use function scope variable from outer of function
+        console.log(b);
+
+        if(a<30){
+                let c=3; //block scope variables
+                console.log("C="+c);
+        }
+        // out side the block we can't access c
+        console.log(c);
+    </script>
+</body>
+</html>

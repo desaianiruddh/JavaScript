@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditional</title>
+</head>
+<body>
+    <script>
+        let a=10,
+            b=20;
+
+        // we can add conditional for check and get result using if else  
+        if(a>b){
+            console.log("A is bigger than B");
+        }
+        else{
+            console.log("B is bigger than A")
+        }
+
+        // if there's more than one condtion we can use if else-if 
+        let x=2,
+            y=2;
+
+        if(x>y){
+            console.log("X is bigger than y");
+        }
+        else if(x<y){
+            console.log("X is smaller than y");
+        }
+        else if(x==y){
+            console.log("X=Y");
+        }
+        else{
+            console.log("invalid input");
+        }
+        //we can use switch case for conditional
+        switch(x){
+            case 1:
+                console.log("Inside Switch: X=1");
+                break;
+            case 2: 
+                console.log("Inside Switch: X=2");
+                break;
+            case 3: 
+                console.log("Inside Switch: X=3");
+                break;
+            default : 
+                console.log("Invalid Input");
+                break;
+        }
+
+    </script>
+</body>
+</html>
