@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styling Using JS</title>
+
+    <!-- CSS  -->
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        Styling Using Javascript
+   </div>
+   <button onclick="myFunc()">Press Here</button>
+   <button id="hideBtn" onclick="hide()">Hide Text</button>
+   <div id="txt">Press Button For Change style</div>
+   <!-- JS  -->
+   <script>
+       //add styling
+       const head=document.getElementById('header');
+       head.style.backgroundColor='gray';
+       head.style.textAlign='center';
+       head.style.fontSize='20px';
+   
+        function myFunc(){
+            let a=document.getElementById('txt');
+            if(a.style.color=='red'){
+                a.style.color='black';
+            }
+            else{
+            a.style.color='red';
+            }
+        }
+        
+        function hide(){
+            let a=document.getElementById('txt');
+            let button=document.getElementById('hideBtn')
+            if(a.style.display!='none'){
+                a.style.display='none';
+                button.textContent="Show Text"
+            }
+            else{
+                a.style.display='block';
+                button.textContent="Hide Text"
+            }
+        }
+        
+
+   </script>
+</body>
+</html>
