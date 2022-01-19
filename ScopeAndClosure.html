@@ -8,6 +8,16 @@
 </head>
 <body>
     <script>
+
+        //closure
+        let incr=(function() {        //self invoked function
+            let counter=0;
+            return function(z){counter+=z; return counter;}; //increament counter as per argument
+        })();
+        console.log("Closure call incr : "+incr(2));
+        console.log("Closure call incr : "+incr(5));
+        console.log("Closure call incr : "+incr(7));
+
         // global scope 
         var a=10;
 
@@ -16,7 +26,7 @@
             let b=15;
             console.log("Inside function b="+b);
             console.log("Inside function val="+val);
-            console.log("Inside function a="+a); //here, we can also access global scope var. in inner function that is closure
+            console.log("Inside function a="+a);
             a=20; //change value of a
         }
         
@@ -33,6 +43,9 @@
         }
         // out side the block we can't access c
         console.log(c);
+
+        
+
     </script>
 </body>
 </html>
