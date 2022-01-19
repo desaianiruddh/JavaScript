@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2><div id="loop">Loop</div></h2>
+</body>
+
+<!-- Internal JS  -->
+<script>
+    let arrA=['a','b','c','d','e','f','g','h','i'];
+    let person = {
+        name : 'Abc',  // property : value
+        surname : 'Def',
+        age : 21,
+    };
+    // for loop for display array elements
+    var arrShow="";
+    for(let i=0;i<arrA.length;i++){
+        arrShow+=arrA[i]+" ";   
+    }
+    console.log("For loop: "+arrShow);
+    
+    //for loop inside for loop (Nested for loop)
+    for(let i=1;i<8;i++){
+        for(let j=1;j<=i;j++){
+            document.write(j);
+        }
+        document.write("<br>");
+    }
+    
+    //while loop
+    arrShow="";
+    let i=0;
+    while(arrA[i]){
+        arrShow += arrA[i] + " ";
+        i++;
+    }
+    console.log("While loop: "+arrShow);
+
+    //do while loop
+    arrShow="";
+    i=0;
+    do{
+        arrShow += arrA[i] + " ";
+        i++;
+    }while(i<arrA.length);
+    console.log("do while loop: "+arrShow);
+
+
+    //for in loop for display object's property
+    var objShow="";
+    for(let x in person){
+        objShow+=x+" ";
+    }
+    console.log("For in: "+objShow);
+    
+    //for in loop for array
+    arrShow="";
+    for(let x in arrA){
+        arrShow+=arrA[x]+" ";
+    }
+    console.log("For in: "+arrShow);
+
+    //forEach loop for array
+    let txt = "";
+    arrA.forEach(forEachFunction);
+
+    function forEachFunction(value, index, array) {
+    txt += value + " ";
+    }
+    console.log("ForEach: "+txt);
+
+    //for of loop for array
+    arrShow="";
+    for(let x of arrA){
+        arrShow+= x + " ";
+    }
+    console.log("For of: "+arrShow)
+
+    //using for of loop we can calculate letter occurence in string
+    let str="sdfgdssiufdbnsdfiunvdiuhneihufnert";
+    let letter={};  
+    for(let x of str){
+        !letter[x]?letter[x]=1:letter[x]++; //make new property for each letter
+    }
+    console.log(JSON.stringify(letter));
+
+</script>
+</html>

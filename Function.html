@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function</title>
+</head>
+<body>
+    <script>
+        // we can use function for complete particular task 
+        function showMsg(msg1,msg2){
+            // if there are two parameter in function 
+            if(msg2){
+                console.log("Message:- "+msg1+" "+msg2);
+            }
+            // if there is only one parameter 
+            else{
+                console.log("Message:- "+msg1);
+            }
+        }
+
+        // call function using two parameters
+        showMsg("Here are","Two Message");
+        // call function using single parameter 
+        showMsg("Only one message");
+
+        // also we can use function using var
+        var showMessage = function (msg){
+            console.log(msg);
+        }
+        showMessage("Function using var");
+
+        // callback function
+        function msgCallback(msg,callback){
+            console.log(msg);
+            callback();  //call a callback function
+        }
+        // pass function as parameter for callback 
+        msgCallback("Function Message", function (){
+            console.log("Callback Function Messsage");
+        });
+        
+        
+        
+    </script>
+</body>
+</html>
