@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Constructor</title>
+</head>
+<body>
+    <h2>Object Constructor</h2>
+
+    <!-- JS -->
+    <script>
+        // object constructor function
+        function person(Fname,Lname,age,city){
+            this.Fname=Fname;
+            this.Lname=Lname;
+            this.age=age;
+            this.city=city;
+            this.changeName= function(fname,lname){
+                this.Fname=fname;
+                this.Lname=lname;
+            }
+        }
+        // new object using constructor function 
+        const p1= new person('Harsh','Desai',19,'Amreli');
+        const p2= new person('Nayan','Patel',22,'Surat');
+        
+        //display
+        console.log("P1 : "+JSON.stringify(p1));
+        console.log("P2 : "+JSON.stringify(p2));
+        console.log("P1.Fname : "+p1.Fname);
+        console.log("P2.Lname : "+p2.Lname);
+
+        //change the value of object using function
+        p1.changeName('Harish','Christian');
+        console.log("P1 after change : "+JSON.stringify(p1));
+        
+    </script>
+    
+</body>
+</html>

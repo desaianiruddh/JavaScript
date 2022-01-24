@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regular Expression</title>
+</head>
+<body>
+    <h2>Regular Expression</h2>
+
+    <!-- JS  -->
+    <script>
+        let str="I am Aniruddh Desai and I am from Surat";
+
+        //using search we can find similar pattern keyword
+        let result=str.search(/rud/); //consider the spaces
+        console.log("Result using search : "+result);
+
+        //using replace we can replace the word
+        result="";
+        result=str.replace(/Aniruddh/i,"Ani"); //i for case-insensitive
+        console.log("Replace : "+result); 
+
+        //for more than one search add g for global search
+        result="";
+        result=str.match(/an/ig);
+        console.log("Global Search : "+result); 
+
+        //range of alphabets and numbers
+        result="";
+        result=str.match(/[c-r]/ig);
+        console.log("[c-r] Search : "+result); 
+        //numeric search
+        let str2="My Enrollment is 913718526454535";
+        result="";
+        result=str2.match(/[1-4]/g);
+        console.log("[1-4] Search : "+result); 
+        
+        //for all digits
+        result="";
+        result=str2.match(/\d/g);
+        console.log("All digit : "+result); 
+
+        //position of similar word
+        result="";
+        result=str.search(/\bsu/i); //search word beginning
+        console.log("Word Beginnig like su(Position) : "+result); 
+
+        result="";
+        result=str.search(/dh\b/i); //search word  ending
+        console.log("Word End like dh(Position) : "+result);
+        
+        //word that contain at least one test letter
+        result="";
+        result=str.match(/\a+/ig);
+        console.log("Word that contain a : "+result); 
+
+        //we can use test for string checking
+        let check=/\d/;
+        console.log("String Has Digit : "+check.test(str));
+    </script>
+</body>
+</html>

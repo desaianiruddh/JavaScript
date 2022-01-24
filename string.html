@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String</title>
+</head>
+<body>
+    <div id="str"></div>
+
+    <!-- Js  -->
+    <script>
+        // initialize string 
+        let str1="Hello Good Morning!!";
+
+        //display string
+        console.log(str1);
+
+        //string addition
+        document.getElementById('str').innerHTML= str1+" This is added string";
+
+        //length of string
+        console.log("Length of String : "+str1.length);
+
+        //substring
+        let subStr1=str1.substring(6,9); //(start,end-1)
+        console.log("Sub-String (substring) : "+subStr1);
+        subStr1=str1.substr(6,4); //(start,length)
+        console.log("Sub-String (substr) : "+subStr1);
+        subStr1=str1.slice(10); 
+        console.log("Sub-String (slice) : "+subStr1);
+
+        //string in uppercase and lower case
+        subStr1=str1.toLowerCase();
+        console.log("LoweCase : "+subStr1);
+        subStr1=str1.toUpperCase();
+        console.log("UpperCase : "+subStr1);
+
+        //concat two string
+        subStr1="How are you";
+        subStr1= subStr1.concat(" ",str1);
+        console.log("Concat : "+subStr1);
+
+        //remove white spaces
+        subStr1="      Hello!! Good Morning                          "
+        subStr1=subStr1.trim();
+        console.log("Trim : "+subStr1);
+
+        //find letter at specific index
+        console.log(str1.charAt(15));
+        console.log(str1.charCodeAt(15)); //return unicode at index 15
+
+        //string to array
+        let arr=str1.split(' ');
+        console.log(arr);
+
+        //use variable in string (template literals)
+        let length=5,
+            width=10;
+        subStr1=`Room length is ${length} and width is ${width}`;
+        console.log('variable in string :'+subStr1);
+
+    </script>
+</body>
+</html>
