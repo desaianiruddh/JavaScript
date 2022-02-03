@@ -1,30 +1,29 @@
 const display = document.getElementById('display');
-const number = document.querySelectorAll('.number');
 const allBtn = document.querySelectorAll('.btn');
-const operation = document.querySelectorAll('.operation');
+const number = document.querySelectorAll('.number');
+const operator = document.querySelectorAll('.operation');
 const clearDisplay = document.querySelectorAll('.clear');
 const trigonometry = document.querySelectorAll('.trigonometry');
 const degreeBtn = document.querySelector('.degreeBtn');
 const classFE = document.querySelector('.classFE');
 const mathFunction = document.querySelectorAll('.mathFunction');
-const secondElement = document.querySelector('.secondElement');
+const secondBtn = document.querySelector('.secondBtn');
 const firstList = document.querySelectorAll('.firstList');
 const memoryFunction = document.querySelectorAll('.memoryFunction');
 const disabledBtn = document.querySelectorAll('.disabledBtn');
 const equalBtn = document.querySelector('.equal');
 display.innerText = '0';
-
+//all the state and variables
 let result;
-let displayText = '';
+let currentText = '';
 let lastElements = '';
 let tempNum = '';
 let deg = true;
-let havedot = false;
+let isDot = false;
 let isFE = false;
-let operationState = true;
-let tempOpearationState = true;
-let isMultiplication = false;
-let isDivision = false;
+let operationState = true, lastOpearationState = true;
+let isMultiplication = false, lastMultiplication = false;
+let isDivision = false, lastDivision = false;
 let isMod = false;
 let isExp = false;
 let plusMinus = [];
@@ -36,107 +35,47 @@ let isSecondList = false;
 let isCombination = false;
 let isPower = false;
 let counter = 0;
+let isBracket = false;
 let bracketStartIndex, bracketEndIndex;
 changeList();
 //alert function
 function alertMsg(msg) {
   alert(msg);
 }
-//click number
-number.forEach(number => {
-  number.addEventListener('click', (e) => {
-    //check for multiple dot
-    if (e.target.innerText === '.' && !havedot) {
-      havedot = true;
-    }
-    else if (e.target.innerText === '.' && havedot) return;
-
-    displayText += e.target.innerText;
-    if (lastElements) {
-      let temp = lastElements + displayText;
-      display.innerText = temp;
-      // display.innerText=lastElements;
-    }
-    else if (isTrigometry) {
-      display.innerText = isTrigometry + '(' + displayText + ')';
-    }
-    else if (mathOperation) {
-      display.innerText = mathOperation + '(' + displayText + ')';
-    }
-    else if (isCombination) {
-      display.innerText = tempNum + 'C' + displayText;
-    }
-    else if (isPower) {
-      display.innerText = tempNum + '^' + displayText;
-    }
-    else {
-      display.innerText = displayText;
-    }
-  })
-})
 //clear all state and variables
 function clearVar() {
-  displayText = lastElements = '';
-  havedot = isMultiplication = isDivision = isTrigometry = mathOperation = isFE = false;
+  currentText = lastElements = tempNum = '';
+  isDot = isMultiplication = isDivision = isTrigometry = mathOperation = isFE = false;
+  isPower = isMod = isExp = isCombination = isInverseTrigonometry = isBracket = false;
+  lastMultiplication = lastDivision = false;
   counter = 0;
-  isPower = isMod = isExp = isCombination = isInverseTrigonometry = false;
   result = null;
-  operationState = true;
+  operationState = lastOpearationState = true;
   plusMinus = plusMinus.slice(0, 0);
-
 }
-//clear display button click
-clearDisplay.forEach(clr => {
-  clr.addEventListener('click', (e) => {
-    if (e.target.innerText === 'C') {
-      clearVar();
-      display.innerText = '0';
-      disabledBtn.forEach(btn => {
-        btn.classList.add('disabled');
-      })
-    }
-    else {
-
-      if (lastElements) {
-        lastElements += displayText;
-        let i = lastElements.length - 1;
-        if (lastElements[i] === '+' || lastElements[i] === '-') plusMinus.pop();
-        lastElements = lastElements.substring(0, i);
-        display.innerText = lastElements;
-        lastElements = displayText;
-      }
-      //if there's trigonometry function
-      else if (isTrigometry) {
-        if (displayText[displayText.length - 1] === '.') havedot = false;
-        displayText = displayText.substring(0, displayText.length - 1);
-        display.innerText = isTrigometry + '(' + displayText + ')';
-      }
-      else if (mathOperation) {
-        if (displayText[displayText.length - 1] === '.') havedot = false;
-        displayText = displayText.substring(0, displayText.length - 1);
-        display.innerText = mathOperation + '(' + displayText + ')';
-      }
-      else {
-        if (displayText[displayText.length - 1] === '.') havedot = false;
-        displayText = displayText.substring(0, displayText.length - 1);
-        if (!displayText) display.innerText = 0;
-        else display.innerText = displayText;
-      }
-    }
-  })
-})
-//plus or minus
-function plusOrMinus() {
-  if (mathOperation) {
-    display.innerText = mathOperation + '(-' + displayText + ')';
-    displayText = ((-1) * parseFloat(displayText)).toString();
+//if there's need of two argument from user
+function twoArgueFromUser(x, y, functionName) {
+  let ans;
+  switch (functionName) {
+    case 'nCr':
+      ans = fact(x) / fact(x - y) / fact(y);
+      return ans;
+      break;
+    case 'power':
+      return x ** y;
+      break;
   }
-  else if (displayText) {
-    operationState ? operationState = false : operationState = true;
-    lastElements = lastElements + '-' + displayText;
-    // display.innerText = lastElements?lastElements+'-'+displayText:'-'+displayText;
-    display.innerText = lastElements;
-
+}
+//degree status
+function setDegree() {
+  e = degreeBtn.innerText;
+  if (deg) {
+    degreeBtn.innerText = 'RAD'
+    deg = false;
+  }
+  else {
+    degreeBtn.innerText = 'DEG';
+    deg = true;
   }
 }
 //set FE state and button
@@ -150,126 +89,53 @@ function setFE() {
     isFE = true;
   }
 }
-//operation
-operation.forEach(operation => {
-  operation.addEventListener('click', (e) => {
+//memory function
+memoryFunction.forEach(memoryFunction => {
+  memoryFunction.addEventListener('click', e => {
     e = e.target.innerText;
-    if (e === '+' || e === '-') {
-      checkPriority();
-      isMultiplication = isDivision = isMod = isExp = false;
+    //set enable to disabled button
+    if (e === 'M+' || e === 'M-' || e === 'MS' || e === 'MR') {
+      disabledBtn.forEach(btn => {
+        btn.classList.remove('disabled');
+      })
     }
-    else if (e === 'x' || e === '÷') {
-      checkPriority();
-      e === 'x' ? isMultiplication = true : isDivision = true;
-      isMod = isExp = false;
+    else {
+      disabledBtn.forEach(btn => {
+        btn.classList.add('disabled');
+      })
     }
-    else if (e === 'n!') {
-      displayText = parseFloat(displayText);
-    }
-    else if (e === 'mod') {
-      if (!displayText) {
-        alert('Enter first Element for mod')
-        return;
-      }
-      else {
-        checkPriority();
-        e === 'mod' ? isMod = true : isMod = false;
-      }
-    }
-    else if (e === 'exp') {
-      if (!displayText) {
-        displayText = 1;
-      }
-      checkPriority();
-      e === 'exp' ? isExp = true : isExp = false;
-    }
-    else if (e === '|x|') {
-      e = '|';
-      let total = 0;
-      if (counter === 0) {
-        bracketStartIndex = plusMinus.length;
-        counter++;
-      }
-      else {
-        checkPriority();
-        bracketEndIndex = plusMinus.length - 1;
-        let diff = bracketEndIndex - bracketStartIndex;
-        for (let k = 0; k <= diff; k++) {
-          total += plusMinus[bracketEndIndex];
-          console.log('element ans of mod>> ' + total);
-          plusMinus.pop();
-          bracketEndIndex--;
+    switch (e) {
+      case 'M+':
+        memory.push(parseFloat(currentText));
+        console.log('M+ >> ' + memory); //print added element
+        break;
+      case 'M-':
+        memory.push((-1) * parseFloat(currentText));
+        console.log('M- >> ' + memory); //print added element
+        break;
+      case 'MS':
+        memory.push(parseFloat(currentText));
+        console.log('MS >> ' + memory); //print added element
+        break;
+      case 'MC':
+        for (let i = 0; i < memory.length; i++) {
+          memory.pop();
         }
-        plusMinus.push(Math.abs(total));
-        counter = 0;
-      }
+        memory[0] = 0;
+        console.log('MC >> ' + memory);
+        break;
+      case 'MR':
+        let total = memory.reduce((sum, cur) => {
+          sum += cur;
+          return sum;
+        }, 0);
+        display.innerText = total;
+        console.log('MR >> ' + memory); //print added element
+        break;
     }
-    else if (e === '(' || e === ')') {
-      let total = 0;
-      if (e === '(') {
-        bracketStartIndex = plusMinus.length;
-        counter++;
-      }
-      else {
-        checkPriority();
-        bracketEndIndex = plusMinus.length - 1;
-        let diff = bracketEndIndex - bracketStartIndex;
-        for (let k = 0; k <= diff; k++) {
-          total += plusMinus[bracketEndIndex];
-          console.log('element ans of bracket>> ' + total);
-          plusMinus.pop();
-          bracketEndIndex--;
-        }
-        plusMinus.push(parseFloat(total));
-      }
-    }
-
-    e === '-' ? operationState = false : operationState = true;
-    lastElements += displayText.toString();
-    lastElements += e;
-    display.innerText = lastElements;
-    displayText = '';
-    havedot = false;
   })
 })
-//check priority
-function checkPriority() {
-  operationState ? plusMinus.push(parseFloat(displayText)) : plusMinus.push((-1) * parseFloat(displayText));
-  if (isMod) mod();
-  if (isExp) exp();
-  if (isMultiplication) multiplication();
-  if (isDivision) division();
-}
-//multiplication and division function
-function multiplication() {
-  let len = plusMinus.length - 1;
-  plusMinus[len - 1] = plusMinus[len - 1] * plusMinus[len];
-  plusMinus = plusMinus.slice(0, len);
-  console.log("multiply>> " + plusMinus); // multiply>> answer
-  isMultiplication = false;
-}
-function division() {
-  let len = plusMinus.length - 1;
-  plusMinus[len - 1] = plusMinus[len - 1] / plusMinus[len];
-  plusMinus = plusMinus.slice(0, len);
-  console.log("div>> " + plusMinus); // div>> answer 
-  isDivision = false;
-}
-function mod() {
-  let len = plusMinus.length - 1;
-  plusMinus[len - 1] = plusMinus[len - 1] % plusMinus[len];
-  plusMinus = plusMinus.slice(0, len);
-  console.log("mod>> " + plusMinus); // mod>> answer
-  isMod = false;
-}
-function exp() {
-  let len = plusMinus.length - 1;
-  plusMinus[len - 1] = plusMinus[len - 1] * (10 ** plusMinus[len]);
-  plusMinus = plusMinus.slice(0, len);
-  console.log("mod>> " + plusMinus); // epx>> answer
-  isExp = false;
-}
-//trigonometry
+//click trigonometry
 trigonometry.forEach(trigonometry => {
   trigonometry.addEventListener('click', (e) => {
     e = e.target.innerText;
@@ -278,21 +144,9 @@ trigonometry.forEach(trigonometry => {
     display.innerText = e + '()';
   })
 })
-//degree status
-function setDegree() {
-  e = degreeBtn.innerText;
-  if (deg) {
-    degreeBtn.innerText = 'RAD'
-    deg = false;
-  }
-  else {
-    degreeBtn.innerText = 'DEG';
-    deg = true;
-  }
-}
 //trigonometry function
 function evalTrigonometry(functionName, degree) {
-  //for inverse trigonometry
+  //for inverse trigonometry and hyp function
   if (isInverseTrigonometry && (functionName === 'sinh' || functionName === 'cosh')) {
     isInverseTrigonometry = false;
     switch (functionName) {
@@ -347,9 +201,9 @@ mathFunction.forEach(mathFunction => {
     e = e.target.innerText;
     clearVar();
     if (e === 'rand') {
-      displayText = Math.random().toFixed(5);
-      display.innerText = displayText;
-      displayText = '';
+      currentText = Math.random().toFixed(5);
+      display.innerText = currentText;
+      currentText = '';
     }
     else {
       mathOperation = e;
@@ -358,7 +212,7 @@ mathFunction.forEach(mathFunction => {
   })
 })
 //maths function calculation
-function mathOp(operationName, num) {
+function evalMathOperation(operationName, num) {
   switch (operationName) {
     case 'abs':
       return Math.abs(num);
@@ -376,50 +230,15 @@ function mathOp(operationName, num) {
       return Math.floor(num);
       break;
     case 'log':
-      return Math.log10(num).toFixed(4);
+      return Math.log10(num);
       break;
     case 'ln':
-      return Math.log(num).toFixed(4);
+      return Math.log(num);
       break;
   }
 }
-//factorial
-function fact(num) {
-  let n;
-  num ? n = parseFloat(num) : n = parseFloat(displayText);
-  let answer = 1;
-  if (n == 0 || n == 1) {
-    return;
-  }
-  else {
-    for (var i = n; i >= 1; i--) {
-      answer = answer * i;
-    }
-    if (num) {
-      return answer;
-    }
-    displayText = answer.toString();
-    display.innerText = lastElements + displayText;
-  }
-}
-//mathPI
-function mathPI() {
-  displayText = (Math.PI).toFixed(4);
-  displayText.toString();
-  display.innerText = lastElements + 'π';
-}
-//mathE
-function mathE() {
-  displayText = (Math.E).toFixed(4);
-  displayText.toString();
-  display.innerText = lastElements + 'e';
-}
-function inverseNum() {
-  displayText = parseFloat(displayText) ** (-1);
-  displayText = displayText.toFixed(2);
-  display.innerText = lastElements + displayText.toString();
-}
 //change first list to second list
+//and second list to first list
 function changeList() {
   if (isSecondList) {
     firstList.forEach(fList => {
@@ -445,7 +264,7 @@ function changeList() {
           break;
       }
     })
-    secondElement.innerHTML = '1<sup>st</sup>';
+    secondBtn.innerHTML = '1<sup>st</sup>';
     isSecondList = false;
   }
   else {
@@ -472,11 +291,11 @@ function changeList() {
           break;
       }
     })
-    secondElement.innerHTML = '2<sup>nd</sup>';
+    secondBtn.innerHTML = '2<sup>nd</sup>';
     isSecondList = true;
   }
 }
-//eval list elements
+//get list elements and value
 firstList.forEach(list => {
   list.addEventListener('click', e => {
     listTxt = e.target.innerText;
@@ -489,45 +308,46 @@ firstList.forEach(list => {
     }
   })
 })
-//eval first list
+//eval first list element
 function firstListClick(functionName, elementVal) {
   switch (elementVal) {
     case 'element1':
-      if (!displayText) {
+      if (!currentText) {
         alertMsg('Add Value For Square');
       }
       else {
-        displayText = parseFloat(displayText) ** 2;
-        display.innerText = displayText.toString();
+        currentText = parseFloat(currentText) ** 2;
+        display.innerText = currentText.toString();
       }
       break;
     case 'element2':
-      if (!displayText) {
+      if (!currentText) {
         alertMsg('Add Value For Square Root');
       }
       else {
-        displayText = parseFloat(displayText) ** (1 / 2);
-        display.innerText = displayText.toString();
+        currentText = parseFloat(currentText) ** (1 / 2);
+        currentText = currentText.toFixed(4);
+        display.innerText = currentText.toString();
       }
       break;
     case 'element3':
-      if (!displayText) {
+      if (!currentText) {
         alertMsg('Add Value X for X^y');
       }
       else {
         isPower = true;
-        tempNum = displayText;
+        tempNum = currentText;
         display.innerText = tempNum + '^';
-        displayText = '';
+        currentText = '';
       }
       break;
     case 'element4':
-      if (!displayText) {
+      if (!currentText) {
         alertMsg('Add Value of 10s exponent');
       }
       else {
-        displayText = 10 ** parseFloat(displayText);
-        display.innerText = displayText.toString();
+        currentText = 10 ** parseFloat(currentText);
+        display.innerText = currentText.toString();
       }
       break;
     case 'element5':
@@ -540,19 +360,20 @@ function firstListClick(functionName, elementVal) {
       break;
   }
 }
-//eval secondList
+//eval secondList element
 function secondListClick(functionName, elementVal) {
   if (elementVal === 'element6') {
-    if (!displayText) {
+    if (!currentText) {
       alertMsg('Add Value of n for nCr');
     }
     else {
       isCombination = true;
-      tempNum = displayText;
-      display.innerText = displayText + 'C';
-      displayText = '';
+      tempNum = currentText;
+      display.innerText = currentText + 'C';
+      currentText = '';
     }
   }
+  //all other are trigonometry function
   else {
     clearVar();
     isInverseTrigonometry = true;
@@ -560,66 +381,298 @@ function secondListClick(functionName, elementVal) {
     display.innerText = functionName + '()';
   }
 }
-//memory function
-memoryFunction.forEach(memoryFunction => {
-  memoryFunction.addEventListener('click', e => {
-    e = e.target.innerText;
-    if (e === 'M+' || e === 'M-' || e === 'MS') {
-      disabledBtn.forEach(btn => {
-        btn.classList.remove('disabled');
-      })
-    }
-    else {
+//mathPI
+function mathPI() {
+  currentText = (Math.PI).toFixed(4);
+  currentText.toString();
+  display.innerText = lastElements + 'π';
+}
+//mathE
+function mathE() {
+  currentText = (Math.E).toFixed(4);
+  currentText.toString();
+  display.innerText = lastElements + 'e';
+}
+//clear button click
+clearDisplay.forEach(clr => {
+  clr.addEventListener('click', (e) => {
+    if (e.target.innerText === 'C') {
+      clearVar();
+      display.innerText = '0';
       disabledBtn.forEach(btn => {
         btn.classList.add('disabled');
       })
+      classFE.classList.remove('btn-dark');
+      console.log('Clear All'); //print clear All
     }
-    switch (e) {
-      case 'M+':
-        memory.push(parseFloat(displayText));
-        break;
-      case 'M-':
-        memory.push((-1) * parseFloat(displayText));
-        break;
-      case 'MS':
-        memory.push(parseFloat(displayText));
-        break;
-      case 'MC':
-        for (let i = 0; i < memory.length; i++) {
-          memory.pop();
+    else {
+      if (lastElements) {
+        if (currentText) {
+          if (currentText[currentText.length - 1] === '.') isDot = false;
+          currentText = currentText.substring(0, currentText.length - 1);
+          display.innerText = lastElements + currentText;
         }
-        break;
-      case 'MR':
-        memory = memory.reduce((sum, cur) => {
-          sum += cur;
-          return sum;
-        }, 0);
-        display.innerText = memory;
-        break;
+        else {
+          let i = lastElements.length - 1;
+          if (lastElements[i] === '+' || lastElements[i] === '-' || lastElements[i] === 'x' || lastElements === '÷')
+            //removed elements will be currentText
+            currentText = plusMinus.pop();
+          currentText = currentText.toString();
+          let j = currentText.length;
+          //remove last element from lastElements string
+          i = i - j;
+          lastElements = lastElements.substring(0, i);
+          i = lastElements.length - 1;
+          console.log(lastElements[i]);
+          display.innerText = lastElements + currentText;
+          console.log('after backspace lastElements >>' + lastElements);
+          console.log('after backspace currentText >>' + currentText);
+        }
+      }
+      //if there's trigonometry function
+      else if (isTrigometry) {
+        if (currentText[currentText.length - 1] === '.') isDot = false;
+        currentText = currentText.substring(0, currentText.length - 1);
+        display.innerText = isTrigometry + '(' + currentText + ')';
+      }
+      else if (mathOperation) {
+        if (currentText[currentText.length - 1] === '.') isDot = false;
+        currentText = currentText.substring(0, currentText.length - 1);
+        display.innerText = mathOperation + '(' + currentText + ')';
+      }
+      else {
+        if (currentText[currentText.length - 1] === '.') isDot = false;
+        currentText = currentText.substring(0, currentText.length - 1);
+        if (!currentText) display.innerText = 0;
+        else display.innerText = currentText;
+      }
     }
   })
 })
-//if there's need of two argument from user
-function twoArgueFromUser(x, y, functionName) {
-  let ans;
-  switch (functionName) {
-    case 'nCr':
-      ans = fact(x) / fact(x - y) / fact(y);
-      return ans;
-      break;
-    case 'power':
-      return x ** y;
-      break;
+// 1/x function
+function inverseNum() {
+  currentText = parseFloat(currentText) ** (-1);
+  currentText = currentText.toFixed(2);
+  display.innerText = lastElements + currentText.toString();
+}
+//operation
+operator.forEach(operation => {
+  operation.addEventListener('click', (e) => {
+    e = e.target.innerText;
+    if (e === '+' || e === '-') {
+      checkPriority();
+      isMultiplication = isDivision = isMod = isExp = false;
+    }
+    else if (e === 'x' || e === '÷') {
+      checkPriority();
+      e === 'x' ? isMultiplication = true : isDivision = true;
+      isMod = isExp = false;
+    }
+    else if (e === 'n!') {
+      currentText = parseFloat(currentText);
+    }
+    else if (e === 'mod') {
+      if (!currentText) {
+        alert('Enter first Element for mod')
+        return;
+      }
+      else {
+        checkPriority();
+        e === 'mod' ? isMod = true : isMod = false;
+      }
+    }
+    else if (e === 'exp') {
+      if (!currentText) {
+        currentText = 1;
+      }
+      checkPriority();
+      e === 'exp' ? isExp = true : isExp = false;
+    }
+    else if (e === '|x|') {
+      e = '|';
+      let answer;
+      if (counter === 0) {
+        //save outer calculation state ans set default inner state
+        lastOpearationState = operationState;
+        lastMultiplication = isMultiplication;
+        lastDivision = isDivision;
+        operationState = true;
+        isDivision = isMultiplication = false;
+        //index of first ele in bracket mod
+        bracketStartIndex = plusMinus.length;
+        counter++;
+      }
+      else {
+        answer = evalBracketElements();
+        //apply back outer calculation state
+        isMultiplication = lastMultiplication;
+        isDivision = lastDivision;
+        operationState = lastOpearationState;
+        console.log('element ans of mod>> ' + answer);
+        operationState ? plusMinus.push(Math.abs(answer)) : plusMinus.push((-1) * Math.abs(answer));
+        counter = 0;
+        isBracket = true;
+      }
+    }
+    else if (e === '(' || e === ')') {
+      let answer;
+      if (e === '(') {
+        //save outer calculation state ans set default inner state
+        lastOpearationState = operationState;
+        lastMultiplication = isMultiplication;
+        lastDivision = isDivision;
+        operationState = true;
+        isDivision = isMultiplication = false;
+        //index of first ele in bracket
+        bracketStartIndex = plusMinus.length;
+      }
+      else {
+        answer = evalBracketElements();
+        //apply back outer calculation state
+        isMultiplication = lastMultiplication;
+        isDivision = lastDivision;
+        operationState = lastOpearationState;
+        console.log('element ans of bracket>> ' + answer);
+        operationState ? plusMinus.push(parseFloat(answer)) : plusMinus.push((-1) * parseFloat(answer));
+        isBracket = true
+      }
+    }
+    //print operator and add in string
+    e === '-' ? operationState = false : operationState = true;
+    lastElements += currentText.toString();
+    lastElements += e;
+    display.innerText = lastElements;
+    currentText = '';
+    isDot = false;
+  })
+})
+//check priority
+function checkPriority() {
+  if (isBracket) {
+    isBracket = false;
   }
+  else {
+    operationState ? plusMinus.push(parseFloat(currentText)) : plusMinus.push((-1) * parseFloat(currentText));
+  }
+  if (isMod) mod();
+  else if (isExp) exp();
+  else if (isDivision) division();
+  else if (isMultiplication) multiplication();
+}
+//multiplication and division function
+function multiplication() {
+  let len = plusMinus.length - 1;
+  plusMinus[len - 1] = plusMinus[len - 1] * plusMinus[len];
+  plusMinus = plusMinus.slice(0, len);
+  console.log("multiply>> " + plusMinus); // multiply>> answer
+  isMultiplication = false;
+}
+function division() {
+  let len = plusMinus.length - 1;
+  plusMinus[len - 1] = plusMinus[len - 1] / plusMinus[len];
+  plusMinus = plusMinus.slice(0, len);
+  console.log("div>> " + plusMinus); // div>> answer 
+  isDivision = false;
+}
+//factorial
+function fact(num) {
+  let n;
+  num ? n = parseFloat(num) : n = parseFloat(currentText);
+  let answer = 1;
+  if (n == 0 || n == 1) {
+    return;
+  }
+  else {
+    for (var i = n; i >= 1; i--) {
+      answer = answer * i;
+    }
+    if (num) {
+      return answer;
+    }
+    currentText = answer.toString();
+    display.innerText = lastElements + currentText;
+  }
+}
+//mod function
+function mod() {
+  let len = plusMinus.length - 1;
+  plusMinus[len - 1] = plusMinus[len - 1] % plusMinus[len];
+  plusMinus = plusMinus.slice(0, len);
+  console.log("mod>> " + plusMinus); // mod>> answer
+  isMod = false;
+}
+//exponential of e
+function exp() {
+  let len = plusMinus.length - 1;
+  plusMinus[len - 1] = plusMinus[len - 1] * (Math.exp(plusMinus[len]));
+  plusMinus = plusMinus.slice(0, len);
+  console.log("exp>> " + plusMinus); // epx>> answer
+  isExp = false;
+}
+//eval in bracket elements
+function evalBracketElements() {
+  let total = 0;
+  checkPriority();
+  bracketEndIndex = plusMinus.length - 1;
+  let diff = bracketEndIndex - bracketStartIndex;
+  for (let k = 0; k <= diff; k++) {
+    total += plusMinus[bracketEndIndex];
+    plusMinus.pop();
+    bracketEndIndex--;
+  }
+  return total;
+}
+//click number
+number.forEach(number => {
+  number.addEventListener('click', (e) => {
+    //check for multiple dot
+    if (e.target.innerText === '.' && !isDot) {
+      isDot = true;
+    }
+    else if (e.target.innerText === '.' && isDot) return;
 
+    currentText += e.target.innerText;
+    if (lastElements) {
+      let temp = lastElements + currentText;
+      display.innerText = temp;
+      // display.innerText=lastElements;
+    }
+    else if (isTrigometry) {
+      display.innerText = isTrigometry + '(' + currentText + ')';
+    }
+    else if (mathOperation) {
+      display.innerText = mathOperation + '(' + currentText + ')';
+    }
+    else if (isCombination) {
+      display.innerText = tempNum + 'C' + currentText;
+    }
+    else if (isPower) {
+      display.innerText = tempNum + '^' + currentText;
+    }
+    else {
+      display.innerText = currentText;
+    }
+  })
+})
+//plus or minus
+function plusOrMinus() {
+  if (mathOperation) {
+    display.innerText = mathOperation + '(-' + currentText + ')';
+    currentText = ((-1) * parseFloat(currentText)).toString();
+  }
+  else if (currentText) {
+    operationState ? operationState = false : operationState = true;
+    lastElements = lastElements + ' -';
+    display.innerText = lastElements + currentText;
+  }
 }
 //eval final answer
 function equal() {
   if (isPower) {
-    result = twoArgueFromUser(parseFloat(tempNum), parseFloat(displayText), 'power');
+    result = twoArgueFromUser(parseFloat(tempNum), parseFloat(currentText), 'power');
   }
   else if (isCombination) {
-    let r = parseFloat(displayText);
+    let r = parseFloat(currentText);
     let n = parseFloat(tempNum);
     if (r > n) {
       alertMsg('r should smaller than n');
@@ -636,37 +689,39 @@ function equal() {
     }
   }
   else if (isTrigometry) {
-    let ans = evalTrigonometry(isTrigometry, parseFloat(displayText));
+    let ans = evalTrigonometry(isTrigometry, parseFloat(currentText));
     !isInverseTrigonometry ? result = ans : result = ans * (180 / Math.PI);
-    result = result.toFixed(2);
   }
   else if (mathOperation) {
-    let ans = mathOp(mathOperation, parseFloat(displayText));
-    result = ans.toFixed(6);
+    let ans = evalMathOperation(mathOperation, parseFloat(currentText));
+    result = ans;
   }
   else if (plusMinus[0]) {
-    displayText ? displayText : displayText = 0;
+    currentText ? currentText : currentText = 0;
     checkPriority();
     operationState = true;
     let sum = 0;
     for (let el of plusMinus) {
       sum += el
     }
-    console.log('ans >>' + sum);
+    console.log('Finale ans>> ' + sum);
     result = sum;
-    console.log('equal' + plusMinus);
+    console.log('Array elements>> ' + plusMinus);
     //if F-E is true
     if (isFE) {
       result = 10 ** result;
     }
   }
   else {
-    result = displayText;
+    !currentText ? result = 0 : result = currentText;
   }
+  //if the result is in decimal
+  result % 1 === 0 ? result = result : result = result.toFixed(4);
+  //print result
   display.innerText = result;
   let tempAns = result;
   clearVar();
-  displayText = tempAns.toString();
+  currentText = tempAns.toString();
 }
 //input from keyboard
 window.addEventListener('keydown', e => {
@@ -698,16 +753,16 @@ window.addEventListener('keydown', e => {
     e === '%'
   ) {
     if (e === '*') {
-      clickOperationButton('x');
+      clickOperatorButton('x');
     }
     else if (e === '/') {
-      clickOperationButton('÷');
+      clickOperatorButton('÷');
     }
     else if (e === '%') {
-      clickOperationButton('mod');
+      clickOperatorButton('mod');
     }
     else {
-      clickOperationButton(e);
+      clickOperatorButton(e);
     }
   }
   //clearAll and backspace
@@ -717,6 +772,9 @@ window.addEventListener('keydown', e => {
   //enter or equal
   else if (e === 'Enter' || e === '=') {
     clickEqual();
+  }
+  else {
+    return;
   }
 })
 //number click function
@@ -728,8 +786,8 @@ function clickNumButton(key) {
   })
 }
 //operator click function
-function clickOperationButton(key) {
-  operation.forEach(btn => {
+function clickOperatorButton(key) {
+  operator.forEach(btn => {
     if (btn.innerText === key) {
       btn.click();
     }
