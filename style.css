@@ -39,7 +39,7 @@ button>img{
   width: 17px;
   object-fit: contain;
 }
-button.number,button.plusMinus{
+button.number,button.plus-minus{
   font-weight: bold;
   background-color: white;
 }

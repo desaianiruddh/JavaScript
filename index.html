@@ -14,35 +14,35 @@
 <body>
   <div class="calculator">
     <div class="container" id="container">
-      <div id="display" class="display my-1">0</div>
+      <div id="display" class="display mb-1"></div>
       <!-- all calc buttons -->
       <div class="buttons">
         <!-- Row 1 -->
         <div class="row_1 row mb-1">
           <div class="col">
-            <button class="btn degreeBtn" onclick='setDegree()'>DEG</button>
+            <button class="btn degree-btn" onclick='setDegree()'>DEG</button>
           </div>
           <div class="col">
-            <button class="btn classFE" onclick='setFE()'>F-E </button>
+            <button class="btn click-fe" onclick='setFE()'>F-E </button>
           </div>
           <div class="col offset-4"></div>
         </div>
         <!-- row -2 -->
         <div class="row g-1 row_2 mb-1">
           <div class="col">
-            <button class="btn memoryFunction disabledBtn disabled">MC</button>
+            <button class="btn memory-function disabled-btn disabled">MC</button>
           </div>
           <div class="col">
-            <button class="btn memoryFunction disabledBtn disabled">MR</button>
+            <button class="btn memory-function disabled-btn disabled">MR</button>
           </div>
           <div class="col">
-            <button class="btn memoryFunction">M+</button>
+            <button class="btn memory-function">M+</button>
           </div>
           <div class="col">
-            <button class="btn memoryFunction">M-</button>
+            <button class="btn memory-function">M-</button>
           </div>
           <div class="col">
-            <button class="btn memoryFunction">MS</button>
+            <button class="btn memory-function">MS</button>
           </div>
         </div>
         <!-- row 3 -->
@@ -67,19 +67,19 @@
               <img src="./buttonPng/function.png" alt="function"> Function
             </button>
             <ul class="dropdown-menu mt-1 border-dark border-2" aria-labelledby="dropdownMenuButton">
-              <li class="dropdown-item"><button class="btn bg-white border-dark mathFunction">abs</button></li>
-              <li class="dropdown-item"><button class="btn btn-light border-dark mathFunction">rand</button></li>
-              <li class="dropdown-item"><button class="btn bg-white border-dark mathFunction">ceil</button></li>
-              <li class="dropdown-item"><button class="btn btn-light border-dark mathFunction">round</button></li>
-              <li class="dropdown-item"><button class="btn bg-white border-dark mathFunction">cbrt</button></li>
-              <li class="dropdown-item"><button class="btn btn-light border-dark mathFunction">floor</button></li>
+              <li class="dropdown-item"><button class="btn bg-white border-dark math-function">abs</button></li>
+              <li class="dropdown-item"><button class="btn btn-light border-dark math-function">rand</button></li>
+              <li class="dropdown-item"><button class="btn bg-white border-dark math-function">ceil</button></li>
+              <li class="dropdown-item"><button class="btn btn-light border-dark math-function">round</button></li>
+              <li class="dropdown-item"><button class="btn bg-white border-dark math-function">cbrt</button></li>
+              <li class="dropdown-item"><button class="btn btn-light border-dark math-function">floor</button></li>
             </ul>
           </div>
         </div>
         <!-- row 4 -->
         <div class="row g-1 row_2 mb-1">
           <div class="col">
-            <button class="btn btn-light secondBtn" onclick='changeList()'>2<sup>nd</sup></button>
+            <button class="btn btn-light second-btn" onclick='changeList()'>2<sup>nd</sup></button>
           </div>
           <div class="col">
             <button class="btn btn-light" onclick="mathPI()">π</button>
@@ -99,7 +99,7 @@
         <!-- row 5 -->
         <div class="row g-1 row_2 mb-1">
           <div class="col">
-            <button class="btn btn-light firstList" value='element1'>x<sup>2</sup></button>
+            <button class="btn btn-light first-list" value='element1'>x<sup>2</sup></button>
           </div>
           <div class="col">
             <button class="btn btn-light" onclick="inverseNum()">1/<sub>X</sub></button>
@@ -117,7 +117,7 @@
         <!-- row 6 -->
         <div class="row g-1 row_2 mb-1">
           <div class="col">
-            <button class="btn btn-light firstList" value='element2'><img src="./buttonPng/sqrt.png"
+            <button class="btn btn-light first-list" value='element2'><img src="./buttonPng/sqrt.png"
                 alt="sqrt"></button>
           </div>
           <div class="col">
@@ -136,7 +136,7 @@
         <!-- row 7 -->
         <div class="row g-1 row_2 mb-1">
           <div class="col">
-            <button class="btn btn-light firstList" value='element3'>x<sup>y</sup></button>
+            <button class="btn btn-light first-list" value='element3'>x<sup>y</sup></button>
           </div>
           <div class="col">
             <button class="btn number">7</button>
@@ -154,7 +154,7 @@
         <!-- row 8 -->
         <div class="row g-1 row_2 mb-1">
           <div class="col">
-            <button class="btn btn-light firstList" value='element4'>10<sup>x</sup></button>
+            <button class="btn btn-light first-list" value='element4'>10<sup>x</sup></button>
           </div>
           <div class="col">
             <button class="btn number">4</button>
@@ -172,7 +172,7 @@
         <!-- row 9 -->
         <div class="row g-1 row_2 mb-1">
           <div class="col">
-            <button class="btn btn-light firstList" value='element5'>log</button>
+            <button class="btn btn-light first-list" value='element5'>log</button>
           </div>
           <div class="col">
             <button class="btn number">1</button>
@@ -190,10 +190,10 @@
         <!-- row 10 -->
         <div class="row g-1 row_2">
           <div class="col">
-            <button class="btn btn-light firstList" value='element6'>ln</button>
+            <button class="btn btn-light first-list" value='element6'>ln</button>
           </div>
           <div class="col">
-            <button class="btn plusMinus" id="plusOrMinus" onclick="plusOrMinus()">
+            <button class="btn plus-minus" onclick="plusOrMinus()">
               <img src="./buttonPng/plusOrMinus.png" alt="plusOrMinus">
             </button>
           </div>

@@ -4,13 +4,13 @@ const number = document.querySelectorAll('.number');
 const operator = document.querySelectorAll('.operation');
 const clearDisplay = document.querySelectorAll('.clear');
 const trigonometry = document.querySelectorAll('.trigonometry');
-const degreeBtn = document.querySelector('.degreeBtn');
-const classFE = document.querySelector('.classFE');
-const mathFunction = document.querySelectorAll('.mathFunction');
-const secondBtn = document.querySelector('.secondBtn');
-const firstList = document.querySelectorAll('.firstList');
-const memoryFunction = document.querySelectorAll('.memoryFunction');
-const disabledBtn = document.querySelectorAll('.disabledBtn');
+const degreeBtn = document.querySelector('.degree-btn');
+const clickFE = document.querySelector('.click-fe');
+const mathFunction = document.querySelectorAll('.math-function');
+const secondBtn = document.querySelector('.second-btn');
+const firstList = document.querySelectorAll('.first-list');
+const memoryFunction = document.querySelectorAll('.memory-function');
+const disabledBtn = document.querySelectorAll('.disabled-btn');
 const equalBtn = document.querySelector('.equal');
 display.innerText = '0';
 //all the state and variables
@@ -81,11 +81,11 @@ function setDegree() {
 //set FE state and button
 function setFE() {
   if (isFE) {
-    classFE.classList.remove('btn-dark');
+    clickFE.classList.remove('btn-dark');
     isFE = false;
   }
   else {
-    classFE.classList.add('btn-dark');
+    clickFE.classList.add('btn-dark');
     isFE = true;
   }
 }
@@ -94,7 +94,7 @@ memoryFunction.forEach(memoryFunction => {
   memoryFunction.addEventListener('click', e => {
     e = e.target.innerText;
     //set enable to disabled button
-    if (e === 'M+' || e === 'M-' || e === 'MS' || e === 'MR') {
+    if (e === 'M+' || e === 'M-' || e === 'MS') {
       disabledBtn.forEach(btn => {
         btn.classList.remove('disabled');
       })
@@ -402,7 +402,7 @@ clearDisplay.forEach(clr => {
       disabledBtn.forEach(btn => {
         btn.classList.add('disabled');
       })
-      classFE.classList.remove('btn-dark');
+      clickFE.classList.remove('btn-dark');
       console.log('Clear All'); //print clear All
     }
     else {
