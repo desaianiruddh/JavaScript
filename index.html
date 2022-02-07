@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h4>Event Bubbling (Click any Child Element)</h4>
+  <span type="button" onclick="alert('clicked parent button')" style="border: 2px dotted blue; padding: 10px;">Parent
+    <span type="button" onclick="alert('clicked child of parent')">Parent-Child
+      <button type="button" onclick="alert('clicked child of child')">Parent-child-child
+      </button>
+    </span>
+  </span>
+  <!--use event.stopPropagation() for stop even bubbling-->
+  <!-- Event Delegation -->
+  <h4>Event Delegation (Click any List Item)</h4>
+  <div id="show-data" style="width: 20%;">
+    <ul id="list-1" style="font-size: larger; border-style: inset;">
+      <li id="water">Water</li>
+      <li id="river">River</li>
+      <li id="computer">Computer</li>
+      <li id="bubble">Bubble</li>
+    </ul>
+    <ul id="list-2" style="font-size: larger; border-style: inset;">
+      <li id="amazon">amazon</li>
+      <li id="flipkart">flipkart</li>
+      <li id="tesla">tesla</li>
+      <li id="TAtat">tata</li>
+    </ul>
+  </div>
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="./index.js"></script>
+  
+</body>
+
+</html>
